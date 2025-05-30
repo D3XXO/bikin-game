@@ -1,0 +1,26 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class Button : MonoBehaviour
+{
+    public void ChangeScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("Scene name is empty!");
+            return;
+        }
+        
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #else
+        
+        Application.Quit();
+        #endif
+    }
+}
