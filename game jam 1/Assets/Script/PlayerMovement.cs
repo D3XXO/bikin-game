@@ -2,21 +2,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpPower;
+    [SerializeField] private float teleportDistance;
+    [SerializeField] private LayerMask obstacleLayer;
+
     float horizontalInput;
-    public float moveSpeed = 5f;
     bool isFacingRight = false;
-    public float jumpPower = 5f;
     bool isJumping = false;
 
     Rigidbody2D rb;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal");
@@ -28,11 +29,53 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             isJumping = true;
         }
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            Teleport();
+        }
     }
 
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+    }
+
+    private void Teleport()
+    {
+        float direction = isFacingRight ? 1f : -1f;
+        Vector2 teleportDirection = new Vector2(direction, 0f);
+
+        float actualDistance = CalculateSafeTeleportDistance(teleportDirection);
+        
+        if (actualDistance > 0.1f)
+        {
+            Vector2 newPosition = new Vector2(
+                transform.position.x + (actualDistance * direction),
+                transform.position.y
+            );
+            transform.position = newPosition;
+        }
+    }
+
+    private float CalculateSafeTeleportDistance(Vector2 direction)
+    {
+        float playerWidth = GetComponent<Collider2D>().bounds.size.x / 2;
+        RaycastHit2D hit = Physics2D.BoxCast(
+            origin: (Vector2)transform.position + (direction * playerWidth),
+            size: new Vector2(0.1f, GetComponent<Collider2D>().bounds.size.y * 0.9f),
+            angle: 0f,
+            direction : direction,
+            distance : teleportDistance,
+            layerMask : obstacleLayer
+        );
+
+        if (hit.collider != null)
+        {
+            return Mathf.Max(0, hit.distance - 0.1f);
+        }
+
+        return teleportDistance;
     }
 
     void FlipSprite()
