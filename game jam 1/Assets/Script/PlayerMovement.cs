@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpPower = 20f;
+    [SerializeField] private float jumpPower = 50f;
     [SerializeField] private float teleportDistance = 3f;
     [SerializeField] private LayerMask obstacleLayer;
 
