@@ -7,21 +7,29 @@ public class Button : MonoBehaviour
 {
     public void ChangeScene(string sceneName)
     {
-        if (string.IsNullOrEmpty(sceneName))
-        {
-            Debug.LogError("Scene name is empty!");
-            return;
-        }
-        
+        if (string.IsNullOrEmpty(sceneName)) return;
+
+        Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName);
     }
 
+    public void RestartLevel()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Main Menu");
+    }
+    
     public void QuitGame()
     {
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
-
         Application.Quit();
         #endif
     }

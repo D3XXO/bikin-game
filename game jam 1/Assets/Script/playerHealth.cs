@@ -7,22 +7,91 @@ public class playerHealth : MonoBehaviour
 {
     public float health;
     public float maxHealth;
-    public Image healthBar;
-    // Start is called before the first frame update
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private float dieAnimationLength;
+    private bool isDead = false;
+
     void Start()
     {
         maxHealth = health;
-        
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        healthBar.fillAmount = Mathf.Clamp(health / maxHealth, 0, 1);
-
-        if(health <= 0)
+        if(health <= 0 && !isDead)
         {
-            Destroy(gameObject);
+            Die();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && !isDead)
+        {
+            health = 0;
+            Die();
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (!isDead)
+        {
+            health -= damage;
+
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+
+        var movement = GetComponent<PlayerMovement>();
+        if (movement != null) movement.enabled = false;
+
+        var enemies = FindObjectsOfType<Enemy>();
+        foreach (var enemy in enemies)
+        {
+            enemy.enabled = false;
+        }
+
+        var elevators = FindObjectsOfType<Elevator>();
+        foreach (var elevator in elevators)
+        {
+            elevator.enabled = false;
+        }
+
+        if (playerAnimator != null)
+        {
+            playerAnimator.SetTrigger("Die");
+            StartCoroutine(ShowGameOverAfterAnimation());
+        }
+        else
+        {
+            ShowGameOver();
+        }
+    }
+
+    private IEnumerator ShowGameOverAfterAnimation()
+    {
+        yield return new WaitForSeconds(dieAnimationLength);
+        ShowGameOver();
+    }
+
+    private void ShowGameOver()
+    {
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
         }
     }
 }

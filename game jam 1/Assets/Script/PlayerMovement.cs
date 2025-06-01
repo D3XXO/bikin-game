@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpPower = 50f;
     [SerializeField] private float teleportDistance = 3f;
     [SerializeField] private LayerMask obstacleLayer;
+    [SerializeField] private KeyCode teleportUpKey;
+    [SerializeField] private KeyCode teleportDownKey;
 
     private float horizontalInput;
     private bool isFacingRight = false;
@@ -32,9 +34,20 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isJumping", true);
         }
 
+        // Teleport horizontal (middle mouse button)
         if (Input.GetMouseButtonDown(2))
         {
-            Teleport();
+            TeleportHorizontal();
+        }
+
+        // Teleport vertikal (atas/bawah)
+        if (Input.GetKeyDown(teleportUpKey))
+        {
+            TeleportVertical(1f); // 1 = atas
+        }
+        else if (Input.GetKeyDown(teleportDownKey))
+        {
+            TeleportVertical(-1f); // -1 = bawah
         }
     }
 
@@ -45,11 +58,10 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("yVelocity", rb.velocity.y);
     }
 
-    void Teleport()
+    void TeleportHorizontal()
     {
         float direction = isFacingRight ? 1f : -1f;
         Vector2 teleportDirection = new Vector2(direction, 0f);
-
         float actualDistance = CalculateSafeTeleportDistance(teleportDirection);
 
         if (actualDistance > 0.1f)
@@ -62,12 +74,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void TeleportVertical(float verticalDirection)
+    {
+        Vector2 teleportDirection = new Vector2(0f, verticalDirection);
+        float actualDistance = CalculateSafeTeleportDistance(teleportDirection);
+
+        if (actualDistance > 0.1f)
+        {
+            Vector2 newPosition = new Vector2(
+                transform.position.x,
+                transform.position.y + (actualDistance * verticalDirection)
+            );
+            transform.position = newPosition;
+        }
+    }
+
     float CalculateSafeTeleportDistance(Vector2 direction)
     {
         float playerWidth = GetComponent<Collider2D>().bounds.size.x / 2;
+        float playerHeight = GetComponent<Collider2D>().bounds.size.y / 2;
+        
+        // Gunakan dimensi yang sesuai berdasarkan arah teleportasi
+        Vector2 castSize = direction.x != 0 ? 
+            new Vector2(0.1f, GetComponent<Collider2D>().bounds.size.y * 0.9f) :
+            new Vector2(GetComponent<Collider2D>().bounds.size.x * 0.9f, 0.1f);
+
         RaycastHit2D hit = Physics2D.BoxCast(
-            origin: (Vector2)transform.position + (direction * playerWidth),
-            size: new Vector2(0.1f, GetComponent<Collider2D>().bounds.size.y * 0.9f),
+            origin: (Vector2)transform.position + (direction * (direction.x != 0 ? playerWidth : playerHeight)),
+            size: castSize,
             angle: 0f,
             direction: direction,
             distance: teleportDistance,
