@@ -4,21 +4,58 @@ public class Obstacle : MonoBehaviour
 {
     [SerializeField] private GameObject objectToActivate;
     [SerializeField] private int damageAmount;
+    [SerializeField] private int requiredPasses;
+    private bool resetOnDeath = true;
+    
+    private int currentPasses = 0;
+    private playerHealth playerHealthRef;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            if (objectToActivate != null)
+            if (playerHealthRef == null)
             {
-                objectToActivate.SetActive(true);
+                playerHealthRef = other.GetComponent<playerHealth>();
+                
+                if (resetOnDeath && playerHealthRef != null)
+                {
+                    playerHealthRef.OnPlayerDeath += ResetPassCount;
+                }
             }
 
-            playerHealth playerHealth = other.GetComponent<playerHealth>();
-            if (playerHealth != null)
+            currentPasses++;
+            
+            if (currentPasses >= requiredPasses)
             {
-                playerHealth.TakeDamage(damageAmount);
+                ActivateObstacle(other);
             }
+        }
+    }
+
+    private void ActivateObstacle(Collider2D player)
+    {
+        if (objectToActivate != null)
+        {
+            objectToActivate.SetActive(true);
+        }
+
+        if (playerHealthRef != null)
+        {
+            playerHealthRef.TakeDamage(damageAmount);
+        }
+    }
+
+    private void ResetPassCount()
+    {
+        currentPasses = 0;
+    }
+
+    private void OnDestroy()
+    {
+        if (playerHealthRef != null)
+        {
+            playerHealthRef.OnPlayerDeath -= ResetPassCount;
         }
     }
 }

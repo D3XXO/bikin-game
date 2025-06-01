@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class playerHealth : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private float dieAnimationLength;
     private bool isDead = false;
+
+    public event Action OnPlayerDeath;
 
     void Start()
     {
@@ -54,6 +57,8 @@ public class playerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
+
+        OnPlayerDeath?.Invoke();
 
         var movement = GetComponent<PlayerMovement>();
         if (movement != null) movement.enabled = false;
