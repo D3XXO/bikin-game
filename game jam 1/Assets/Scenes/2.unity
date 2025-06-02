@@ -2775,7 +2775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c23563c180ff64bb01e80a3eb0d101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: Main Menu
+  targetSceneName: 3
 --- !u!212 &913283689
 SpriteRenderer:
   m_ObjectHideFlags: 0
