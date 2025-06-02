@@ -60,6 +60,8 @@ public class BoxScaleController : MonoBehaviour
         UpdatePushability();
     }
 
+
+
     void ResetScale()
     {
         transform.localScale = originalScale;
