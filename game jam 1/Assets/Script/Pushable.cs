@@ -1,20 +1,19 @@
 using UnityEngine;
 
-public class BoxScaleController : MonoBehaviour
+public class Pushable : MonoBehaviour
 {
     [Header("Scale Settings")]
-    public float scaleFactor = 2f;
-    public float pushableScaleThreshold = 1.2f;
+    public float scaleFactor;
+    public float pushableScaleThreshold;
 
     [Header("Physics Settings")]
-    public float normalMass = 1f;
-    public float heavyMass = 100f;
+    public float normalMass;
+    public float heavyMass;
     [Tooltip("Prevents objects from becoming too light when small")]
-    public float minMass = 0.2f;
+    public float minMass;
 
     private Vector3 originalScale;
     private bool isMouseOver = false;
-    private bool isScaled = false;
     private Rigidbody2D rb;
     private Collider2D col;
 
@@ -38,64 +37,44 @@ public class BoxScaleController : MonoBehaviour
         if (isMouseOver)
         {
 
-            if (Input.GetMouseButtonDown(0)) // Left click - make smaller
+            if (Input.GetMouseButtonDown(0))
             {
-                if (isScaled)
-                {
-                    ResetScale();
-                }
-                else
-                {
-                    MakeSmaller();
-                }
+                MakeSmaller();
             }
         }
     }
 
-
     void MakeSmaller()
     {
         transform.localScale = originalScale / scaleFactor;
-        isScaled = true;
-        UpdatePushability();
-    }
-
-
-
-    void ResetScale()
-    {
-        transform.localScale = originalScale;
-        isScaled = false;
         UpdatePushability();
     }
 
     void UpdatePushability()
     {
-        float currentScale = transform.localScale.x; // Using X axis as reference
+        float currentScale = transform.localScale.x;
         float scaleRatio = currentScale / originalScale.x;
 
         if (scaleRatio <= pushableScaleThreshold)
         {
-            // Pushable state
             rb.isKinematic = false;
-            rb.mass = Mathf.Max(normalMass * scaleRatio, minMass); // Never goes below minMass
+            rb.mass = Mathf.Max(normalMass * scaleRatio, minMass);
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             gameObject.tag = "Pushable";
-
-            // Ensure collider is active
-            if (col != null)
-            {
-                col.enabled = true;
-            }
         }
         else
         {
-            // Immovable state
-            rb.isKinematic = true;
+            rb.isKinematic = false;
             rb.mass = heavyMass;
-            gameObject.tag = "Immovable";
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            gameObject.tag = "Ground";
         }
 
-        // Force physics update
+        if (col != null)
+        {
+            col.enabled = true;
+        }
+
         Physics2D.SyncTransforms();
     }
 

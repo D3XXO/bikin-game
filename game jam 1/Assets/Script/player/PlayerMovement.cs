@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpPower = 50f;
-    [SerializeField] private float teleportDistance = 3f;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpPower;
+    [SerializeField] private float teleportDistance;
     [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private KeyCode teleportUpKey;
     [SerializeField] private KeyCode teleportDownKey;
@@ -34,20 +34,18 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isJumping", true);
         }
 
-        // Teleport horizontal (middle mouse button)
         if (Input.GetMouseButtonDown(2))
         {
             TeleportHorizontal();
         }
 
-        // Teleport vertikal (atas/bawah)
         if (Input.GetKeyDown(teleportUpKey))
         {
-            TeleportVertical(1f); // 1 = atas
+            TeleportVertical(1f);
         }
         else if (Input.GetKeyDown(teleportDownKey))
         {
-            TeleportVertical(-1f); // -1 = bawah
+            TeleportVertical(-1f);
         }
     }
 
@@ -93,9 +91,8 @@ public class PlayerMovement : MonoBehaviour
     {
         float playerWidth = GetComponent<Collider2D>().bounds.size.x / 2;
         float playerHeight = GetComponent<Collider2D>().bounds.size.y / 2;
-        
-        // Gunakan dimensi yang sesuai berdasarkan arah teleportasi
-        Vector2 castSize = direction.x != 0 ? 
+
+        Vector2 castSize = direction.x != 0 ?
             new Vector2(0.1f, GetComponent<Collider2D>().bounds.size.y * 0.9f) :
             new Vector2(GetComponent<Collider2D>().bounds.size.x * 0.9f, 0.1f);
 
@@ -129,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Pushable"))
         {
             isGrounded = true;
             animator.SetBool("isJumping", false);

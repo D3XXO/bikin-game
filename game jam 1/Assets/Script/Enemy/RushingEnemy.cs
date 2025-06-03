@@ -4,16 +4,17 @@ using UnityEngine;
 public class RushingEnemy : MonoBehaviour
 {
     [Header("Stealth Settings")]
-    [SerializeField] private float activationRadius = 5f;
-    [SerializeField] private float fadeInDuration = 0.5f;
+    [SerializeField] private float activationRadius;
+    [SerializeField] private float fadeInDuration;
 
     [Header("Dash Settings")]
-    [SerializeField] private float dashSpeed = 15f;
-    [SerializeField] private float dashDuration = 0.3f;
-    [SerializeField] private float dashCooldown = 2f;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashCooldown;
+    [SerializeField] private bool faceRight = true;
 
     [Header("Player Kill Settings")]
-    [SerializeField] private int damage = 100; // Instantly kills player if health < damage
+    [SerializeField] private int damage;
 
     private Transform player;
     private Rigidbody2D rb;
@@ -26,8 +27,8 @@ public class RushingEnemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        SetVisibility(false); // Start hidden
-
+        SetVisibility(false);
+        FlipSprite(faceRight);
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
     }
@@ -38,14 +39,12 @@ public class RushingEnemy : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        // Activate if player is close
         if (!isVisible && distanceToPlayer <= activationRadius)
             RevealEnemy();
 
-        // Dash if visible and off cooldown
         if (isVisible && !isDashing && Time.time >= lastDashTime + dashCooldown)
             if (distanceToPlayer <= activationRadius)
-                StartCoroutine(DashTowardsPlayer());
+                StartCoroutine(DashForward());
     }
 
     private void RevealEnemy()
@@ -71,16 +70,14 @@ public class RushingEnemy : MonoBehaviour
         spriteRenderer.color = endColor;
     }
 
-    private IEnumerator DashTowardsPlayer()
+    private IEnumerator DashForward()
     {
         isDashing = true;
         lastDashTime = Time.time;
 
-        Vector2 dashDirection = (player.position - transform.position).normalized;
+        Vector2 dashDirection = faceRight ? Vector2.right : Vector2.left;
         rb.velocity = dashDirection * dashSpeed;
-        FlipSprite(dashDirection.x > 0);
 
-        // Ignore walls during dash
         Collider2D enemyCollider = GetComponent<Collider2D>();
         if (enemyCollider != null)
             enemyCollider.isTrigger = true;
@@ -90,25 +87,23 @@ public class RushingEnemy : MonoBehaviour
         rb.velocity = Vector2.zero;
         isDashing = false;
 
-        // Re-enable collisions
         if (enemyCollider != null)
             enemyCollider.isTrigger = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Kill player on contact during dash
         if (isDashing && other.CompareTag("Player"))
         {
             playerHealth playerHealth = other.GetComponent<playerHealth>();
             if (playerHealth != null)
-                playerHealth.TakeDamage(damage); // Assumes player has a health system
+                playerHealth.TakeDamage(damage);
         }
     }
 
     private void FlipSprite(bool faceRight)
     {
-        spriteRenderer.flipX = faceRight;
+        spriteRenderer.flipX = !faceRight;
     }
 
     private void SetVisibility(bool visible)

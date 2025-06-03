@@ -15,17 +15,25 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float visionAngle;
     [SerializeField] private LayerMask obstacleLayers;
 
+    [Header("Animation Settings")]
+    [SerializeField] private string attackAnimationTrigger = "Attack";
+    [SerializeField] private float attackAnimationDuration;
+
     public Transform player;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
     private List<Vector2> playerPositions = new List<Vector2>();
     private float lastRecordTime;
     private bool isMovementPaused = false;
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         if (player == null)
         {
@@ -35,6 +43,16 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (isAttacking)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0f)
+            {
+                isAttacking = false;
+            }
+            return;
+        }
+
         bool canSeePlayer = CanSeePlayer();
         
         if (canSeePlayer && Time.time - lastRecordTime > recordInterval && !isMovementPaused)
@@ -45,7 +63,7 @@ public class Enemy : MonoBehaviour
 
         CheckPauseMovement();
 
-        if (!isMovementPaused)
+        if (!isMovementPaused && !isAttacking)
         {
             if (Vector2.Distance(transform.position, player.position) <= closeRadius && canSeePlayer)
             {
@@ -59,6 +77,26 @@ public class Enemy : MonoBehaviour
         else
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && !isAttacking)
+        {
+            StartAttackAnimation();
+        }
+    }
+
+    private void StartAttackAnimation()
+    {
+        isAttacking = true;
+        attackTimer = attackAnimationDuration;
+        rb.velocity = Vector2.zero;
+        
+        if (animator != null)
+        {
+            animator.SetTrigger(attackAnimationTrigger);
         }
     }
 

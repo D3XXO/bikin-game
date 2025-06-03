@@ -4,13 +4,9 @@ using UnityEngine;
 public class DisappearBlock : MonoBehaviour
 {
     [Header("Disappear Settings")]
-    [SerializeField] public float disappearDelay = 0.5f; // Time before block disappears
-    [SerializeField] public float respawnTime = 3f; // Time before block reappears
-    [SerializeField] public bool permanentDisappear = false; // If true, won't respawn
-
-    [Header("Visual Feedback")]
-    [SerializeField] private ParticleSystem disappearParticles;
-    [SerializeField] private AudioClip disappearSound;
+    [SerializeField] public float disappearDelay;
+    [SerializeField] public float respawnTime;
+    [SerializeField] public bool permanentDisappear = false;
 
     private Collider2D blockCollider;
     private SpriteRenderer blockRenderer;
@@ -24,7 +20,6 @@ public class DisappearBlock : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if player landed on top of the block
         if (collision.gameObject.CompareTag("Player") && IsPlayerAbove(collision))
         {
             StartCoroutine(DisappearSequence());
@@ -33,28 +28,17 @@ public class DisappearBlock : MonoBehaviour
 
     private bool IsPlayerAbove(Collision2D collision)
     {
-        // Check if player is coming from above
         return collision.relativeVelocity.y <= 0;
     }
 
     private IEnumerator DisappearSequence()
     {
-        // Visual/Sound feedback
-        if (disappearParticles != null)
-            disappearParticles.Play();
-
-        if (disappearSound != null)
-            AudioSource.PlayClipAtPoint(disappearSound, transform.position);
-
-        // Wait before disappearing
         yield return new WaitForSeconds(disappearDelay);
 
-        // Make block invisible and non-collidable
         blockCollider.enabled = false;
         blockRenderer.enabled = false;
         isVisible = false;
 
-        // Respawn if not permanent
         if (!permanentDisappear)
         {
             yield return new WaitForSeconds(respawnTime);
@@ -69,7 +53,6 @@ public class DisappearBlock : MonoBehaviour
         isVisible = true;
     }
 
-    // For debugging
     private void OnDrawGizmos()
     {
         if (!isVisible)

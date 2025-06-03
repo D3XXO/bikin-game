@@ -1,17 +1,23 @@
 using UnityEngine;
+
 public class ScaleController : MonoBehaviour
 {
     [Header("Scale Settings")]
-    [Tooltip("Nilai positif untuk memperbesar, negatif untuk memperkecil")]
-    public float scaleFactor;
+    [Tooltip("Faktor untuk memperbesar object")]
+    public float scaleUpFactor;
+    
+    [Tooltip("Faktor untuk memperkecil object")]
+    public float scaleDownFactor;
 
     private Vector3 originalScale;
     private bool isMouseOver = false;
     private bool isScaled = false;
+
     void Start()
     {
         originalScale = transform.localScale;
     }
+
     void Update()
     {
         if (isMouseOver)
@@ -24,7 +30,7 @@ public class ScaleController : MonoBehaviour
                 }
                 else
                 {
-                    ApplyScale(scaleFactor);
+                    ApplyScale(scaleUpFactor);
                     isScaled = true;
                 }
             }
@@ -37,32 +43,29 @@ public class ScaleController : MonoBehaviour
                 }
                 else
                 {
-                    ApplyScale(-scaleFactor);
+                    ApplyScale(1/scaleDownFactor);
                     isScaled = true;
                 }
             }
         }
     }
+
     void ApplyScale(float factor)
     {
-        if (factor > 0)
-        {
-            transform.localScale = originalScale * factor;
-        }
-        else if (factor < 0)
-        {
-            transform.localScale = originalScale / Mathf.Abs(factor);
-        }
+        transform.localScale = originalScale * factor;
     }
+
     void ResetScale()
     {
         transform.localScale = originalScale;
         isScaled = false;
     }
+
     void OnMouseEnter()
     {
         isMouseOver = true;
     }
+
     void OnMouseExit()
     {
         isMouseOver = false;

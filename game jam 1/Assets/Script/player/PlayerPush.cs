@@ -8,13 +8,11 @@ public class AutoPush : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Only push objects with the "Pushable" tag
         if (collision.gameObject.CompareTag("Pushable"))
         {
             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (rb != null && !rb.isKinematic)
             {
-                // Calculate push direction (player -> object)
                 Vector2 pushDirection = collision.transform.position - transform.position;
                 pushDirection.Normalize();
 
@@ -23,7 +21,6 @@ public class AutoPush : MonoBehaviour
         }
     }
 
-    // Visualize push radius in editor
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;

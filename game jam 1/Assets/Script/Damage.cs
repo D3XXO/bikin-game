@@ -4,26 +4,22 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
-    public playerHealth pHealth;
-    public float damage;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private int damageAmount;
+    private playerHealth playerHealthRef;
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            pHealth.health -= damage;
+            if (playerHealthRef == null)
+            {
+                playerHealthRef = collision.gameObject.GetComponent<playerHealth>();
+            }
         }
-        
+
+        if (playerHealthRef != null)
+        {
+            playerHealthRef.TakeDamage(damageAmount);
+        }
     }
 }
