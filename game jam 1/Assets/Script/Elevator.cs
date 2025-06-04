@@ -5,7 +5,7 @@ public class Elevator : MonoBehaviour
 {
     [SerializeField] private List<Transform> waypoints;
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float waypointThreshold = 0.1f;
+    [SerializeField] private float waypointThreshold;
 
     private int currentWaypointIndex = 0;
 

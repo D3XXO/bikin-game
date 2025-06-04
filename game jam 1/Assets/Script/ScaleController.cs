@@ -20,6 +20,8 @@ public class ScaleController : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;
+
         if (isMouseOver)
         {
             if (Input.GetMouseButtonDown(1))
