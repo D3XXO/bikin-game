@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Button : MonoBehaviour
 {
+    internal bool interactable;
+
+    public bool Interactable { get; internal set; }
+
     public void ChangeScene(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName)) return;
