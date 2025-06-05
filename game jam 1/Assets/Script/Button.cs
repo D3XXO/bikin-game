@@ -9,6 +9,11 @@ public class Button : MonoBehaviour
 
     public bool Interactable { get; internal set; }
 
+    AudioManager audioManager;
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     public void ChangeScene(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName)) return;
@@ -19,19 +24,22 @@ public class Button : MonoBehaviour
 
     public void RestartLevel()
     {
+        audioManager.PlaySFX(audioManager.Button);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnToMainMenu()
     {
+        audioManager.PlaySFX(audioManager.Button);
         Time.timeScale = 1f;
         SceneManager.LoadScene("Main Menu");
     }
     
     public void QuitGame()
     {
-        #if UNITY_EDITOR
+        audioManager.PlaySFX(audioManager.Button);
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
         Application.Quit();

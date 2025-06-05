@@ -12,6 +12,12 @@ public class DisappearBlock : MonoBehaviour
     private SpriteRenderer blockRenderer;
     private bool isVisible = true;
 
+    AudioManager audioManager;
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();  
+    }
+
     private void Start()
     {
         blockCollider = GetComponent<Collider2D>();
@@ -22,6 +28,7 @@ public class DisappearBlock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && IsPlayerAbove(collision))
         {
+            audioManager.PlaySFX(audioManager.Disappear);
             StartCoroutine(DisappearSequence());
         }
     }

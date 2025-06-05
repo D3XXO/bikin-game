@@ -17,6 +17,13 @@ public class Pushable : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D col;
 
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     void Start()
     {
         originalScale = transform.localScale;
@@ -39,6 +46,7 @@ public class Pushable : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
+                audioManager.PlaySFX(audioManager.Scale);
                 MakeSmaller();
             }
         }

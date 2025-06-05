@@ -5,13 +5,20 @@ public class ScaleController : MonoBehaviour
     [Header("Scale Settings")]
     [Tooltip("Faktor untuk memperbesar object")]
     public float scaleUpFactor;
-    
+
     [Tooltip("Faktor untuk memperkecil object")]
     public float scaleDownFactor;
 
     private Vector3 originalScale;
     private bool isMouseOver = false;
     private bool isScaled = false;
+
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     void Start()
     {
@@ -26,6 +33,7 @@ public class ScaleController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(1))
             {
+                audioManager.PlaySFX(audioManager.Scale);
                 if (isScaled && transform.localScale != originalScale)
                 {
                     ResetScale();
@@ -39,13 +47,14 @@ public class ScaleController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
+                audioManager.PlaySFX(audioManager.Scale);
                 if (isScaled && transform.localScale != originalScale)
                 {
                     ResetScale();
                 }
                 else
                 {
-                    ApplyScale(1/scaleDownFactor);
+                    ApplyScale(1 / scaleDownFactor);
                     isScaled = true;
                 }
             }

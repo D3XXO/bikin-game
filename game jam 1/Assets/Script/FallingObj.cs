@@ -18,10 +18,18 @@ public class FallingObj : MonoBehaviour
     private playerHealth playerHealthRef;
     private int currentlySpawnedObjects = 0;
 
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            audioManager.PlaySFX(audioManager.Spike);
             if (playerHealthRef == null)
             {
                 playerHealthRef = other.GetComponent<playerHealth>();

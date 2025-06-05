@@ -15,6 +15,13 @@ public class playerHealth : MonoBehaviour
 
     public event Action OnPlayerDeath;
 
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     void Start()
     {
         maxHealth = health;
@@ -57,6 +64,7 @@ public class playerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        audioManager.PlaySFX(audioManager.Die);
 
         OnPlayerDeath?.Invoke();
 
