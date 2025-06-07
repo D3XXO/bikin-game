@@ -11,9 +11,9 @@ public class LevelMenu : MonoBehaviour
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
+
     public void OpenLevel(int LevelId)
     {
-        audioManager.PlaySFX(audioManager.Button);
         string levelName = "Level" + LevelId;
         SceneManager.LoadScene(levelName);
     }

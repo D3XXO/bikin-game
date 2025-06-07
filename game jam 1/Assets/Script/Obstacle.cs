@@ -12,16 +12,10 @@ public class Obstacle : MonoBehaviour
 
     AudioManager audioManager;
 
-    private void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            audioManager.PlaySFX(audioManager.Spike);
             if (playerHealthRef == null)
             {
                 playerHealthRef = other.GetComponent<playerHealth>();

@@ -12,6 +12,7 @@ public class playerHealth : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private float dieAnimationLength;
     private bool isDead = false;
+    private bool isWinning = false;
 
     public event Action OnPlayerDeath;
 
@@ -41,11 +42,16 @@ public class playerHealth : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && !isDead)
+        if (collision.gameObject.CompareTag("Enemy") && !isDead && !isWinning)
         {
             health = 0;
             Die();
         }
+    }
+
+    public void SetWinningState(bool winning)
+    {
+        isWinning = winning;
     }
 
     public void TakeDamage(int damage)
@@ -63,6 +69,8 @@ public class playerHealth : MonoBehaviour
 
     private void Die()
     {
+        if (isWinning) return;
+
         isDead = true;
         audioManager.PlaySFX(audioManager.Die);
 

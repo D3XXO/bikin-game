@@ -304,10 +304,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 2766412138410312601}
   SFXSource: {fileID: 3886663878123799374}
-  BGM: {fileID: 8300000, guid: 16770c88d87bc2b4eb7307f86ade0200, type: 3}
+  BGM: {fileID: 8300000, guid: a1d3e52da2e1a0a4292cc6b7702eb0d0, type: 3}
   Win: {fileID: 8300000, guid: ac9271733d63a6a42b1b933061bf76aa, type: 3}
-  Die: {fileID: 8300000, guid: ed81d1e3d2cfe0a4694882442cad85ff, type: 3}
-  Scale: {fileID: 8300000, guid: 0f6bce45d24079144be238a12abb36eb, type: 3}
+  Die: {fileID: 8300000, guid: e572803b0a98003489e6de860fde9d06, type: 3}
+  Scale: {fileID: 8300000, guid: 1d8bb1aaa7aa61045b0db966263ecc87, type: 3}
   Drop: {fileID: 8300000, guid: 08e40d9e14c35d942851c2b83e6e7c72, type: 3}
   Spike: {fileID: 8300000, guid: 08e40d9e14c35d942851c2b83e6e7c72, type: 3}
   Disappear: {fileID: 8300000, guid: 6755e9f016c5a394996bfc0c93c62fe0, type: 3}

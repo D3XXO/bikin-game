@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bb12f78f1d18d094db443285e192a647
+guid: 92f8b6f567ad38c4fb641327cb5f8261
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 15
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,22 +110,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: latar_0
+      name: gam2_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 2
-        width: 14
-        height: 12
+        y: 58
+        width: 100
+        height: 19
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 236c0fd1ec7cf8c4293a243cc9533c0e
-      internalID: -1678125262
+      spriteID: 8c440811de82daf4e85a32e87948691f
+      internalID: -1238488620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gam2_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 39
+        width: 100
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4d86c3c415a8ce408f0fef278205d8b
+      internalID: -728114668
       vertices: []
       indices: 
       edges: []
@@ -141,7 +162,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      latar_0: -1678125262
+      gam2_0: -1238488620
+      gam2_1: -728114668
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

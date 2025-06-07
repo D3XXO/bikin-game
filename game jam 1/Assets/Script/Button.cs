@@ -24,22 +24,19 @@ public class Button : MonoBehaviour
 
     public void RestartLevel()
     {
-        audioManager.PlaySFX(audioManager.Button);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnToMainMenu()
     {
-        audioManager.PlaySFX(audioManager.Button);
         Time.timeScale = 1f;
         SceneManager.LoadScene("Main Menu");
     }
     
     public void QuitGame()
     {
-        audioManager.PlaySFX(audioManager.Button);
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
         Application.Quit();

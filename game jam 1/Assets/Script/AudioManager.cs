@@ -13,11 +13,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip Win;
     public AudioClip Die;
     public AudioClip Scale;
-    public AudioClip Drop;
     public AudioClip Spike;
     public AudioClip Disappear;
-    public AudioClip Button;
-
 
     private void Start()
     {
@@ -29,5 +26,4 @@ public class AudioManager : MonoBehaviour
     {
         SFXSource.PlayOneShot(clip);
     }
-
 }
